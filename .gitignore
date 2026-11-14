@@ -1,0 +1,5 @@
+/bin/
+/hnfetcher
+coverage.out
+.env
+*.test

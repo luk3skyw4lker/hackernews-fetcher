@@ -1,0 +1,34 @@
+{
+  "_comment": "Fake HN dataset. Mirrors internal/store/seeds/00001_demo_snapshot.sql. Item 103 is absent (=> missing); item 104 is served as HTTP 500 by tests (=> error); user 'ghost' is absent (=> missing).",
+  "topstories": [100, 900, 200, 300],
+  "items": {
+    "100": { "id": 100, "type": "story", "by": "alice", "time": 1762956000, "title": "Show HN: A tiny HN crawler", "url": "https://example.com/crawler", "score": 128, "descendants": 7, "kids": [101, 102, 103, 104] },
+    "101": { "id": 101, "type": "comment", "by": "bob", "time": 1762956100, "parent": 100, "text": "Nice work! How do you handle <i>deleted</i> comments?", "kids": [105, 106] },
+    "102": { "id": 102, "type": "comment", "by": "eve", "time": 1762956200, "parent": 100, "text": "[flagged]", "dead": true },
+    "104": { "id": 104, "type": "comment", "by": "dave", "time": 1762956300, "parent": 100, "text": "never served" },
+    "105": { "id": 105, "type": "comment", "by": "carol", "time": 1762956400, "parent": 101, "text": "They keep their kids, so you keep walking.", "kids": [107] },
+    "106": { "id": 106, "type": "comment", "deleted": true, "time": 1762956500, "parent": 101, "kids": [108] },
+    "107": { "id": 107, "type": "comment", "by": "alice", "time": 1762956600, "parent": 105, "text": "Exactly &mdash; and mark them as deleted.", "some_future_field": {"ignored": true} },
+    "108": { "id": 108, "type": "comment", "by": "dave", "time": 1762956700, "parent": 106, "text": "Replying to a deleted comment." },
+
+    "900": { "id": 900, "type": "job", "by": "gina", "time": 1762950000, "title": "Acme (YC W26) is hiring Go engineers", "url": "", "score": 1 },
+
+    "200": { "id": 200, "type": "poll", "by": "frank", "time": 1762957000, "title": "Poll: Favorite Go concurrency primitive?", "score": 64, "descendants": 3, "kids": [201, 202], "parts": [210, 211] },
+    "201": { "id": 201, "type": "comment", "by": "bob", "time": 1762957100, "parent": 200, "text": "Channels, obviously.", "kids": [203] },
+    "202": { "id": 202, "type": "comment", "by": "carol", "time": 1762957200, "parent": 200, "text": "errgroup is underrated." },
+    "203": { "id": 203, "type": "comment", "by": "ghost", "time": 1762957300, "parent": 201, "text": "Mutexes are fine too." },
+    "210": { "id": 210, "type": "pollopt", "by": "frank", "time": 1762957000, "poll": 200, "text": "Channels", "score": 30 },
+    "211": { "id": 211, "type": "pollopt", "by": "frank", "time": 1762957000, "poll": 200, "text": "Mutexes", "score": 12 },
+
+    "300": { "id": 300, "type": "story", "by": "alice", "time": 1762958000, "title": "A story with no comments", "url": "https://example.com/quiet", "score": 5, "descendants": 0 }
+  },
+  "users": {
+    "alice": { "id": "alice", "created": 1300000000, "karma": 4200, "about": "Builds crawlers.", "submitted": [100, 107, 300] },
+    "bob":   { "id": "bob",   "created": 1310000000, "karma": 900,  "submitted": [101, 201] },
+    "carol": { "id": "carol", "created": 1320000000, "karma": 1500, "submitted": [105, 202] },
+    "dave":  { "id": "dave",  "created": 1330000000, "karma": 77,   "submitted": [104, 108] },
+    "eve":   { "id": "eve",   "created": 1340000000, "karma": -4,   "submitted": [102] },
+    "frank": { "id": "frank", "created": 1350000000, "karma": 3100, "about": "Polls <b>everything</b>.", "submitted": [200, 210, 211] },
+    "gina":  { "id": "gina",  "created": 1360000000, "karma": 10,   "submitted": [900] }
+  }
+}

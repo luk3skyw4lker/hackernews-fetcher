@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: hn
+      POSTGRES_PASSWORD: hn
+      POSTGRES_DB: hn
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hn -d hn"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  hn-fetcher:
+    build:
+      context: .
+      args:
+        VERSION: "${VERSION:-dev}"
+    image: hn-fetcher:local
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      PORT: 8080
+      DATABASE_URL: postgres://hn:hn@postgres:5432/hn?sslmode=disable
+      DB_AUTO_MIGRATE: "true"
+      DB_AUTO_SEED: "${DB_AUTO_SEED:-false}" # true = load the offline demo snapshot
+      TOP_STORIES: "${TOP_STORIES:-5}"
+      REFRESH_INTERVAL: "${REFRESH_INTERVAL:-5m}"
+      REFRESH_ENABLED: "${REFRESH_ENABLED:-true}"
+      HN_MAX_CONCURRENCY: "${HN_MAX_CONCURRENCY:-32}"
+      CRAWL_TIMEOUT: "${CRAWL_TIMEOUT:-60s}"
+      LOG_LEVEL: "${LOG_LEVEL:-info}"
+    healthcheck:
+      test: ["CMD", "/hnfetcher", "healthcheck"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  pgdata:

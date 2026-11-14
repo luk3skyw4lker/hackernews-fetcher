@@ -1,0 +1,34 @@
+version: "2"
+linters:
+  enable:
+    - bodyclose
+    - errorlint
+    - gocritic
+    - misspell
+    - nilerr
+    - revive
+    - unconvert
+  settings:
+    errcheck:
+      exclude-functions:
+        # Writes to stdout/stderr and best-effort closes in defer.
+        - fmt.Fprint
+        - fmt.Fprintf
+        - fmt.Fprintln
+        - (io.Closer).Close
+        - (io.ReadCloser).Close
+        - (*github.com/luk3skyw4lker/hackernews-fetcher/internal/store.Migrator).Close
+    revive:
+      rules:
+        - name: exported
+          disabled: true
+        - name: package-comments
+          disabled: true
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/luk3skyw4lker/hackernews-fetcher
